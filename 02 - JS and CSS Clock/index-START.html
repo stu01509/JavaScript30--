@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+
+<body>
+
+
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
+    </div>
+  </div>
+
+
+  <style>
+    html {
+      background: #018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1),
+      inset 0 0 0 3px #EFEFEF,
+      inset 0 0 10px black,
+      0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px);
+      /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transition: all .07s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+
+      transform: rotate(90deg);
+      /*將指針指向 12:00:00*/
+      transform-origin: 100%;
+      /*調整選轉指針的位置*/
+    }
+  </style>
+
+  <script>
+    (function () {
+
+      const minHand = document.querySelector('.min-hand');
+      const secHand =document.querySelector('.second-hand'); 
+      const hourHand = document.querySelector('.hour-hand');
+      
+      let s = new Date().getSeconds();
+      let m = new Date().getMinutes();
+      let h = new Date().getHours();
+
+      let hDeg = h * 360/12 + m* 360/(12*60) + 90 ;
+      let mDeg = m * 360/60 + s *360/(60*60) + 90;
+      let sDeg = s * 360/60 + 90;
+
+    function getAngle() {
+      hourHand.style.transform = `rotate(${hDeg}deg)`;
+      minHand.style.transform = `rotate(${mDeg}deg)`;
+      secHand.style.transform = `rotate(${sDeg}deg)`;
+    };
+
+    function addAngle() {
+      hDeg +=  360 / 43200;
+      mDeg +=  360 / 3600;
+      sDeg +=  360 / 60;
+      hourHand.style.transform = `rotate(${hDeg}deg)`;
+      minHand.style.transform = `rotate(${mDeg}deg)`;
+      secHand.style.transform = `rotate(${sDeg}deg)`;
+    };
+
+    getAngle();
+    setInterval(addAngle,1000);
+    })()
+    
+    // (function(){
+      
+    //   const secHand = document.querySelector('.second-hand');
+    //   const minHand = document.querySelector('.min-hand');
+    //   const hourHand = document.querySelector('.hour-hand');
+
+    //   function setDate() {
+    //     let s = new Date().getSeconds();
+    //     let m = new Date().getMinutes();
+    //     let h = new Date().getHours();
+
+    //     let sDeg = 360 / 60 * s;
+    //     let mDeg = 360 / 60 * m + 6 / 60 * s ;
+    //     let hDeg = 360 / 12 * (h % 12) + 30 / 60 * m;
+
+    //     secHand.style.transform = `rotate(${sDeg + 90}deg)`;
+    //     minHand.style.transform = `rotate(${mDeg + 90}deg)`;
+    //     hourHand.style.transform = `rotate(${hDeg + 90}deg)`;
+          
+    //   }
+
+    //   setInterval(setDate, 1000);
+    //   setDate();
+    // })()
+  </script>
+</body>
+
+</html>
