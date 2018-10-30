@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+  <script>
+    const searchBar = document.querySelector('.search');
+    const suggestion = document.querySelector('.suggestions');
+
+    searchBar.addEventListener('keyup', showItem);
+
+    const endpoint =
+      'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+    // Save Cities Data
+    const cities = [];
+
+    //使用 Promise所以要使用 json() 將資料轉換成Obj
+
+    fetch(endpoint)
+      .then(blob => blob.json())
+      .then(data => cities.push(...data));
+    // .then(data => cities = data)
+
+    function searchItem(keyWord, cities) {
+      return cities.filter(place => {
+        const regexp = new RegExp(keyWord, 'gi')
+        return place.city.match(regexp) || place.state.match(regexp);
+      })
+    }
+
+    function showItem() {
+      keyValue = this.value.trim();
+      foundItem = searchItem(keyValue, cities);
+
+      console.log(foundItem);
+
+      const htmlView = foundItem.map(function (item) {
+        const regex = new RegExp(keyValue, 'gi');
+        const cityName = item.city.replace(regex, `<span class="hl">${keyValue}</span>`);
+        const stateName = item.state.replace(regex, `<span class="hl">${keyValue}</span>`);
+        return `
+      <li>
+
+        <span class='name'>${cityName}, ${stateName}</span>
+        <span class='population'>${Number(item.population).toLocaleString()}</span>
+      </li>
+    
+    `;
+
+      }).join('');
+      suggestion.innerHTML = htmlView;
+    }
+  </script>
+</body>
+
+</html>
