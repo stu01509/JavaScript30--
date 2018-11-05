@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+const pressedData = [];
+const secretCode = 'cliff';
+
+window.addEventListener('keyup', function(e){
+  console.log(e.key);
+  pressedData.push(e.key);
+  // 保持pressedData陣列的長度與密碼的長度一致
+  pressedData.splice(-secretCode.length - 1, pressedData.length - secretCode.length);
+  // 用 includes 來判斷pressedData陣列使否與密碼相同
+  if(pressedData.join('').includes(secretCode)){
+    console.log('WoW');
+    cornify_add();
+  }
+  console.log(pressedData);
+  
+})
+
+</script>
+</body>
+</html>
